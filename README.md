@@ -1,10 +1,6 @@
 # transdata
 
-数据转发工具
-
-##Install
-
-    npm install transdata
+自用，简易数据转发工具
 
 ##Usage
 
