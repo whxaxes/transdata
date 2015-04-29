@@ -70,12 +70,12 @@ function main(opt) {
                 options.headers["Content-Type"] = opt.req.headers["content-type"];
                 options.headers["Content-Length"] = opt.req.headers["content-length"];
             }
+
             process.nextTick(function () {
                 opt.req.pipe(creq);
             })
         } else {
             var str = ((typeof opt.req) == "string") ? opt.req : "";
-            options.headers["Content-Length"] = str ? 0 : (new Buffer(str)).length;
 
             process.nextTick(function () {
                 creq.end(str);

@@ -24,11 +24,7 @@ describe("check post" , function(){
             req:'{"sign":"60e6b361178618c597b02b49b9c47968","id":"1408432939493","client":{"caller":"xxzsassmdv","ex":"{}"},"encrypt":"md5","data":{"channelId":100005753,"requestType":"JPJJC"}}',
             url:'http://xxzs.9game.cn:9020/game.getGameAdPositions',
             success:function(data){
-                if(data){
-                    done();
-                }else {
-                    throw new Error("no data")
-                }
+                done();
             },
             error:function(e){
                 throw e;
