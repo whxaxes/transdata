@@ -88,7 +88,7 @@ function main(opt) {
             creq.end();
         })
     }
-    console.log(opt.timeout)
+    
     timeout = setTimeout(function(){
         isTimeout = true;
         opt.error(new Error("Request Timeout"));
@@ -100,6 +100,7 @@ function main(opt) {
         clearTimeout(timeout);
         reqCallback(opt.res, res, opt.success)
     }).on('error', function (e) {
+        clearTimeout(timeout);
         opt.error(e);
     });
 }
