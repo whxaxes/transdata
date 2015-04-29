@@ -43,7 +43,9 @@ function main(opt) {
 
     var error = (typeof opt.error == "function") ? opt.error : noop;
     opt.error = function(e){
-        clearTimeout(timeout);
+        if(timeout) clearTimeout(timeout);
+        if(isTimeout) return;
+
         error(e);
     };
 
@@ -69,44 +71,42 @@ function main(opt) {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.37 Safari/537.36'
         }
     };
-
-//  如果req为可读流则使用pipe连接，传输数据，如果不是则直接写出字符串
-    if (opt.method == 'post') {
-        if (opt.req instanceof stream.Readable) {
-            if(opt.req instanceof http.IncomingMessage){
-                options.headers["Content-Type"] = opt.req.headers["content-type"];
-                options.headers["Content-Length"] = opt.req.headers["content-length"];
-            }
-
-            process.nextTick(function () {
-                opt.req.pipe(creq);
-            })
-        } else {
-            var str = ((typeof opt.req) == "string") ? opt.req : "";
-
-            process.nextTick(function () {
-                creq.end(str);
-            })
-        }
-    } else {
-        process.nextTick(function () {
-            creq.end();
-        })
+    if(opt.req instanceof http.IncomingMessage){
+        options.headers["Content-Type"] = opt.req.headers["content-type"];
+        options.headers["Content-Length"] = opt.req.headers["content-length"];
     }
 
+    //设定最大请求时间
     timeout = setTimeout(function(){
-        isTimeout = true;
         opt.error(new Error("Request Timeout"));
+
+        isTimeout = true;
     } , opt.timeout);
 
+    //发起请求
     creq = http.request(options, function (res) {
         if(isTimeout) return;
 
         clearTimeout(timeout);
         reqCallback(opt.res, res, opt.success)
     }).on('error', function (e) {
+        console.log("sss")
         opt.error(e);
     });
+
+    //如果req为可读流则使用pipe连接，传输数据，如果不是则直接写出字符串
+    if (opt.method == 'post') {
+        if (opt.req instanceof stream.Readable) {
+            opt.req.pipe(creq);
+        } else {
+            var str = ((typeof opt.req) == "string") ? opt.req : "";
+
+            creq.write(str);
+            creq.end();
+        }
+    } else {
+        creq.end();
+    }
 }
 
 //请求成功后的回调
