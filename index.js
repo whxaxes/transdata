@@ -33,12 +33,14 @@ var transdata = {
 
 //转发请求主要逻辑
 function main(opt) {
-    var options, creq;
+    var options, creq, timeout;
+    var isTimeout = false;
 
 //    res可以为response对象，也可以为一个可写流，success和error为请求成功或失败后的回调
     opt.res = ((opt.res instanceof http.ServerResponse) || (opt.res instanceof stream.Writable)) ? opt.res : null;
     opt.success = (typeof opt.success == "function") ? opt.success : noop;
     opt.error = (typeof opt.error == "function") ? opt.error : noop;
+    opt.timeout = (typeof opt.timeout == "number") ? opt.timeout : 20000;//默认请求超时为20秒
 
     try {
         opt.url = (typeof opt.url == "string") ? url.parse(opt.url) : null;
@@ -86,8 +88,16 @@ function main(opt) {
             creq.end();
         })
     }
+    console.log(opt.timeout)
+    timeout = setTimeout(function(){
+        isTimeout = true;
+        opt.error(new Error("Request Timeout"));
+    } , opt.timeout);
 
     creq = http.request(options, function (res) {
+        if(isTimeout) return;
+
+        clearTimeout(timeout);
         reqCallback(opt.res, res, opt.success)
     }).on('error', function (e) {
         opt.error(e);
