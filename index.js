@@ -39,8 +39,13 @@ function main(opt) {
 //    res可以为response对象，也可以为一个可写流，success和error为请求成功或失败后的回调
     opt.res = ((opt.res instanceof http.ServerResponse) || (opt.res instanceof stream.Writable)) ? opt.res : null;
     opt.success = (typeof opt.success == "function") ? opt.success : noop;
-    opt.error = (typeof opt.error == "function") ? opt.error : noop;
     opt.timeout = (typeof opt.timeout == "number") ? opt.timeout : 20000;//默认请求超时为20秒
+
+    var error = (typeof opt.error == "function") ? opt.error : noop;
+    opt.error = function(e){
+        clearTimeout(timeout);
+        error(e);
+    };
 
     try {
         opt.url = (typeof opt.url == "string") ? url.parse(opt.url) : null;
@@ -88,7 +93,7 @@ function main(opt) {
             creq.end();
         })
     }
-    
+
     timeout = setTimeout(function(){
         isTimeout = true;
         opt.error(new Error("Request Timeout"));
@@ -100,7 +105,6 @@ function main(opt) {
         clearTimeout(timeout);
         reqCallback(opt.res, res, opt.success)
     }).on('error', function (e) {
-        clearTimeout(timeout);
         opt.error(e);
     });
 }
