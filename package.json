@@ -1,7 +1,7 @@
 {
   "name": "transdata",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "自用，简易数据转发工具",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -10,5 +10,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "wanghx",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whxaxes/transdata"
+  },
+  "bugs": {
+    "url": "https://github.com/whxaxes/transdata/issues"
+  },
+  "homepage": "https://github.com/whxaxes/transdata"
 }

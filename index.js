@@ -3,6 +3,7 @@
 var http = require("http");
 var stream = require("stream");
 var url = require("url");
+var zlib = require("zlib");
 
 var noop = function () {};
 
@@ -109,10 +110,16 @@ function reqCallback(ores, res, callback) {
         });
 
         if (ores instanceof http.ServerResponse) {
-            ores.writeHead(200, {
-                'Content-Type': res.headers['content-type'] || 'application/json; charset=UTF-8',
-                'Content-Length': res.headers['content-length']
-            });
+            var options = {};
+
+            //复制相应头信息
+            if(res.headers){
+                for(var k in res.headers){
+                    options[k] = res.headers[k];
+                }
+            }
+
+            ores.writeHead(200, options);
         }
 
         res.pipe(ores);
@@ -124,7 +131,21 @@ function reqCallback(ores, res, callback) {
             size += chunk.length;
             chunks.push(chunk);
         }).on('end', function () {
-            callback(Buffer.concat(chunks, size).toString())
+            var buffer = Buffer.concat(chunks, size);
+
+            //如果数据用gzip或者deflate压缩，则用zlib进行解压缩
+            if(res.headers && res.headers['content-encoding'] && res.headers['content-encoding'].match(/(\bdeflate\b)|(\bgzip\b)/)){
+                zlib.unzip(buffer , function(err , buffer){
+                    if(!err){
+                        callback(buffer.toString())
+                    }else {
+                        console.log(err);
+                        callback("");
+                    }
+                });
+            }else {
+                callback(buffer.toString())
+            }
         })
     }
 }
