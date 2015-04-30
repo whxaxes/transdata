@@ -59,11 +59,11 @@ function main(opt) {
         opt.error(new Error("url is illegal"));
         return;
     }
-
+    console.log(opt.url.pathname + opt.url.search)
     options = {
         hostname: opt.url.hostname,
         port: opt.url.port,
-        path: opt.url.pathname,
+        path: opt.url.pathname + (opt.url.search || ""),
         method: opt.method,
         headers: {
             'Accept-Encoding': 'gzip, deflate',
