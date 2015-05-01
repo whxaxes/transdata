@@ -1,6 +1,6 @@
 {
   "name": "transdata",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "自用，简易数据转发工具",
   "main": "index.js",
   "directories": {
