@@ -59,7 +59,7 @@ function main(opt) {
         opt.error(new Error("url is illegal"));
         return;
     }
-    console.log(opt.url.pathname + opt.url.search)
+
     options = {
         hostname: opt.url.hostname,
         port: opt.url.port,
@@ -90,7 +90,6 @@ function main(opt) {
         clearTimeout(timeout);
         reqCallback(opt.res, res, opt.success)
     }).on('error', function (e) {
-        console.log("sss")
         opt.error(e);
     });
 
