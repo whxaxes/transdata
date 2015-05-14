@@ -140,7 +140,7 @@ function reqCallback(ores, res, callback) {
             var buffer = Buffer.concat(chunks, size);
 
             //如果数据用gzip或者deflate压缩，则用zlib进行解压缩
-            if (res.headers && res.headers['content-encoding'] && res.headers['content-encoding'].match(/(\bdeflate\b)|(\bgzip\b)/)) {
+            if (res.headers && res.headers['content-encoding'] && res.headers['content-encoding'].match(/\b(deflate|gzip)\b/)) {
                 zlib.unzip(buffer, function (err, buffer) {
                     if (!err) {
                         callback(buffer.toString())
