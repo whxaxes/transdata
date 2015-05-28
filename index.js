@@ -74,7 +74,7 @@ function main(opt) {
         }
     }else {
         options.headers = {
-            'Content-Length' : Buffer.getByteLength((typeof req == "string")?req:""),
+            'Content-Length' : Buffer.byteLength((typeof req == "string")?req:""),
             'Accept-Encoding': 'gzip, deflate',
             'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4,zh-TW;q=0.2',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.37 Safari/537.36'
