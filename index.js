@@ -72,8 +72,8 @@ function main(opt) {
         }
     };
     if(opt.req instanceof http.IncomingMessage){
-        options.headers["Content-Type"] = opt.req.headers["content-type"];
-        options.headers["Content-Length"] = opt.req.headers["content-length"];
+        if(opt.req.headers["content-type"]) options.headers["Content-Type"] = opt.req.headers["content-type"];
+        if(opt.req.headers["content-length"]) options.headers["Content-Length"] = opt.req.headers["content-length"];
     }
 
     //设定最大请求时间
