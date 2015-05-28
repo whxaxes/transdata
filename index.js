@@ -64,16 +64,21 @@ function main(opt) {
         hostname: opt.url.hostname,
         port: opt.url.port,
         path: opt.url.pathname + (opt.url.search || ""),
-        method: opt.method,
-        headers: {
+        method: opt.method
+    };
+
+    if(opt.req instanceof http.IncomingMessage){
+        options.headers = {};
+        for(var k in opt.req.headers){
+            options.headers[k] = opt.req.headers[k];
+        }
+    }else {
+        options.headers = {
+            'Content-Length' : Buffer.getByteLength((typeof req == "string")?req:""),
             'Accept-Encoding': 'gzip, deflate',
             'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4,zh-TW;q=0.2',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.37 Safari/537.36'
-        }
-    };
-    if(opt.req instanceof http.IncomingMessage){
-        if(opt.req.headers["content-type"]) options.headers["Content-Type"] = opt.req.headers["content-type"];
-        if(opt.req.headers["content-length"]) options.headers["Content-Length"] = opt.req.headers["content-length"];
+        };
     }
 
     //设定最大请求时间
