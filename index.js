@@ -80,6 +80,7 @@ function main(opt) {
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.37 Safari/537.36'
         };
     }
+    options.headers['referer'] = options.headers['origin'] = options.headers['host'] = opt.url.hostname;
 
     //设定最大请求时间
     timeout = setTimeout(function(){
