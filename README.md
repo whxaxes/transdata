@@ -2,9 +2,9 @@
 
 自用，简易数据转发工具
 
-##Usage
+## Usage
 
-post
+### post
 
     var transdata = require("transdata");
     var http = require("http");
@@ -22,8 +22,7 @@ post
         });
     })
 
-
-get
+### get
 
     //也可以用上面那种对象模式
     transdata.get('http://XXXX.com/' , function(data){
