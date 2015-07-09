@@ -36,6 +36,16 @@ function main(opt) {
     var options, creq, timeout;
     var isTimeout = false;
 
+    //延时请求
+    if(/^\d+$/.test(opt.delay) && opt.delay>0){
+        setTimeout(function(){
+            opt.delay = null;
+            main(opt);
+        } , +opt.delay);
+
+        return;
+    }
+
 //    res可以为response对象，也可以为一个可写流，success和error为请求成功或失败后的回调
     opt.res = ((opt.res instanceof http.ServerResponse) || (opt.res instanceof stream.Writable)) ? opt.res : null;
     opt.success = (typeof opt.success == "function") ? opt.success : noop;
