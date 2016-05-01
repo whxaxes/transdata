@@ -86,6 +86,7 @@ function main(opt) {
         options.headers = {
             'Content-Length' : Buffer.byteLength((typeof req == "string")?req:""),
             'Accept-Encoding': 'gzip, deflate',
+            'Content-Type':'application/x-www-form-urlencoded',
             'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6,ja;q=0.4,zh-TW;q=0.2',
             'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.37 Safari/537.36'
         };
